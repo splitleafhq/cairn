@@ -8,7 +8,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/seriouslysean/cairn/internal/model"
+	"github.com/splitleafhq/cairn/internal/model"
 )
 
 // Column is the issues of one status, the one updated last first. Collapsed is true for a closed or archived status:

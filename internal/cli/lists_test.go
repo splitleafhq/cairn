@@ -9,8 +9,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/seriouslysean/cairn/internal/model"
-	"github.com/seriouslysean/cairn/internal/store"
+	"github.com/splitleafhq/cairn/internal/model"
+	"github.com/splitleafhq/cairn/internal/store"
 )
 
 // list runs a command with --json, checks that its data is a list, and returns the items as maps.

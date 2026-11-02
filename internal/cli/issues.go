@@ -8,8 +8,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/seriouslysean/cairn/internal/model"
-	"github.com/seriouslysean/cairn/internal/store"
+	"github.com/splitleafhq/cairn/internal/model"
+	"github.com/splitleafhq/cairn/internal/store"
 )
 
 func runInit(c *call) (output, error) {

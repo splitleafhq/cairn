@@ -6,8 +6,8 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/seriouslysean/cairn/internal/model"
-	"github.com/seriouslysean/cairn/internal/store"
+	"github.com/splitleafhq/cairn/internal/model"
+	"github.com/splitleafhq/cairn/internal/store"
 )
 
 func runMilestones(c *call) (output, error) {

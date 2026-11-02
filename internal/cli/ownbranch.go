@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/seriouslysean/cairn/internal/store"
+	"github.com/splitleafhq/cairn/internal/store"
 )
 
 // What init --own-branch names in git.

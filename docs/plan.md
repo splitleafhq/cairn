@@ -127,7 +127,7 @@ Release step:
   allows. This part landed before step 4, so every later pull request is checked.
 - `cairn version` reports the tag. It prints the main module's version as Go records it in the binary
   (`runtime/debug.ReadBuildInfo`), which is the tag for `go install …@v0.1.0`; `-ldflags` never run under `go install`.
-- `go install github.com/seriouslysean/cairn/cmd/cairn@v0.1.0` works, and the README says how to install and start.
+- `go install github.com/splitleafhq/cairn/cmd/cairn@v0.1.0` works, and the README says how to install and start.
 - Tag `v0.1.0` on main, with a GitHub release whose notes list what works and what is not in it yet.
 
 ## Step 7: --branches

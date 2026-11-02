@@ -16,8 +16,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/seriouslysean/cairn/internal/doc"
-	"github.com/seriouslysean/cairn/internal/id"
+	"github.com/splitleafhq/cairn/internal/doc"
+	"github.com/splitleafhq/cairn/internal/id"
 )
 
 // DateLayout is how a date is written: "2006-01-02".

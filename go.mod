@@ -1,3 +1,3 @@
-module github.com/seriouslysean/cairn
+module github.com/splitleafhq/cairn
 
 go 1.24

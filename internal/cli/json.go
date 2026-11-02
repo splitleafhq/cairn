@@ -1,6 +1,6 @@
 package cli
 
-import "github.com/seriouslysean/cairn/internal/model"
+import "github.com/splitleafhq/cairn/internal/model"
 
 // The JSON that commands print, as the package doc describes it.
 

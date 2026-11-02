@@ -5,8 +5,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/seriouslysean/cairn/internal/board"
-	"github.com/seriouslysean/cairn/internal/store"
+	"github.com/splitleafhq/cairn/internal/board"
+	"github.com/splitleafhq/cairn/internal/store"
 )
 
 // pagePerm is the mode of the page board --html writes, the mode of the tracker's own files.

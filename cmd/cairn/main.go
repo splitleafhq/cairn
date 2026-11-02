@@ -7,7 +7,7 @@ import (
 	"os"
 	"runtime/debug"
 
-	"github.com/seriouslysean/cairn/internal/cli"
+	"github.com/splitleafhq/cairn/internal/cli"
 )
 
 // version is the main module's version as Go recorded it in the binary: the tag for go install …@v0.1.0 or a build

@@ -12,7 +12,7 @@ next.
 Needs Go 1.24 or later.
 
 ```sh
-go install github.com/seriouslysean/cairn/cmd/cairn@latest
+go install github.com/splitleafhq/cairn/cmd/cairn@latest
 cairn version
 ```
 
@@ -82,6 +82,6 @@ fills in the data: to refresh it, run the command again.
 
 ## Requests
 
-Open an issue at https://github.com/seriouslysean/cairn/issues and say what you were trying to do.
+Open an issue at https://github.com/splitleafhq/cairn/issues and say what you were trying to do.
 
 License: MIT.

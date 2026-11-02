@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/seriouslysean/cairn/internal/doc"
+	"github.com/splitleafhq/cairn/internal/doc"
 )
 
 // reader reads typed values out of a file's fields. The first problem it meets is kept and returned by done, and

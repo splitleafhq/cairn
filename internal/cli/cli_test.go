@@ -11,8 +11,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/seriouslysean/cairn/internal/model"
-	"github.com/seriouslysean/cairn/internal/store"
+	"github.com/splitleafhq/cairn/internal/model"
+	"github.com/splitleafhq/cairn/internal/store"
 )
 
 var t0 = time.Date(2026, 10, 18, 9, 30, 0, 123456789, time.UTC)

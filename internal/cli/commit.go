@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"path"
 
-	"github.com/seriouslysean/cairn/internal/store"
+	"github.com/splitleafhq/cairn/internal/store"
 )
 
 // write is what a write changed, for commit on write: the tracker, the issue's or milestone's id, and the path to

@@ -6,7 +6,7 @@ import (
 	"html/template"
 	"time"
 
-	"github.com/seriouslysean/cairn/internal/model"
+	"github.com/splitleafhq/cairn/internal/model"
 )
 
 // pageSource is the page, compiled into the binary. It is fixed: a run fills in data and changes nothing else. It

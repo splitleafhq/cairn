@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"slices"
 
-	"github.com/seriouslysean/cairn/internal/model"
-	"github.com/seriouslysean/cairn/internal/store"
-	"github.com/seriouslysean/cairn/internal/words"
+	"github.com/splitleafhq/cairn/internal/model"
+	"github.com/splitleafhq/cairn/internal/store"
+	"github.com/splitleafhq/cairn/internal/words"
 )
 
 // kinds are the kinds comment takes.

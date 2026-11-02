@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/seriouslysean/cairn/internal/doc"
+	"github.com/splitleafhq/cairn/internal/doc"
 )
 
 const specIssue = `---

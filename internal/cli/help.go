@@ -3,7 +3,7 @@ package cli
 import (
 	"strings"
 
-	"github.com/seriouslysean/cairn/internal/store"
+	"github.com/splitleafhq/cairn/internal/store"
 )
 
 func runVersion(c *call) (output, error) {

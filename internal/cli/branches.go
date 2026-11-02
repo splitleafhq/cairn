@@ -12,9 +12,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/seriouslysean/cairn/internal/id"
-	"github.com/seriouslysean/cairn/internal/model"
-	"github.com/seriouslysean/cairn/internal/store"
+	"github.com/splitleafhq/cairn/internal/id"
+	"github.com/splitleafhq/cairn/internal/model"
+	"github.com/splitleafhq/cairn/internal/store"
 )
 
 // branchVersion is an issue as one branch's last commit has it. branch is "" for the checkout's own version.

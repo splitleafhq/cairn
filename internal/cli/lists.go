@@ -10,8 +10,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/seriouslysean/cairn/internal/model"
-	"github.com/seriouslysean/cairn/internal/words"
+	"github.com/splitleafhq/cairn/internal/model"
+	"github.com/splitleafhq/cairn/internal/words"
 )
 
 // defaultLimit is how many rows ls and search print when neither --limit nor --all is given.

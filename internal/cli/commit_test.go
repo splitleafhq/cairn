@@ -12,7 +12,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/seriouslysean/cairn/internal/store"
+	"github.com/splitleafhq/cairn/internal/store"
 )
 
 // writeConfig replaces the tracker's config.yml with text, and leaves the change uncommitted.
@@ -130,7 +130,7 @@ func TestCommitOnWrite(t *testing.T) {
 }
 
 // A write commits its issue's whole folder, so another writer's temporary file in that folder, half written, must not
-// go in with it (seriouslysean/cairn#32). The tracker's .gitignore keeps git from seeing those files at all.
+// go in with it (splitleafhq/cairn#32). The tracker's .gitignore keeps git from seeing those files at all.
 func TestCommitSkipsTemporaryFiles(t *testing.T) {
 	tr := commitTracker(t, "")
 	a := tr.write("new", "A title")

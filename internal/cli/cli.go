@@ -203,7 +203,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/seriouslysean/cairn/internal/store"
+	"github.com/splitleafhq/cairn/internal/store"
 )
 
 // Env is everything a command touches outside its arguments. A nil Now means time.Now, a nil Rand means
