@@ -4,7 +4,7 @@ Cairn is an issue tracker for coding agents first and people second. `docs/spec.
 `docs/plan.md` gives the build order and how each step is made.
 
 ## Build and test
-- Go 1.24 or later, standard library only unless `docs/plan.md` names a dependency.
+- Go 1.26 or later, standard library only unless `docs/plan.md` names a dependency.
 - `scripts/check.sh` passes. It runs `gofmt -s -l .` and `go fix -diff ./...` (both must print nothing), `go vet`,
   `staticcheck -checks all` (pinned, run with `go run`, so it is not a module dependency) and `go test`.
   `lefthook install` runs it before every push (`lefthook.yml`).

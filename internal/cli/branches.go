@@ -260,8 +260,7 @@ func (g gitRepo) run(args ...string) ([]byte, error) {
 	if err == nil {
 		return out, nil
 	}
-	var exit *exec.ExitError
-	if errors.As(err, &exit) {
+	if exit, ok := errors.AsType[*exec.ExitError](err); ok {
 		if msg := oneLine(exit.Stderr); msg != "" {
 			err = fmt.Errorf("%w: %s", err, msg)
 		}

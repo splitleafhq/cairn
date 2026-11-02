@@ -9,7 +9,7 @@ next.
 
 ## Install
 
-Needs Go 1.24 or later.
+Needs Go 1.26 or later.
 
 ```sh
 go install github.com/splitleafhq/cairn/cmd/cairn@latest

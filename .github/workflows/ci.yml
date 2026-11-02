@@ -1,4 +1,4 @@
-name: check
+name: CI
 
 on:
   pull_request:
@@ -9,6 +9,20 @@ permissions:
   contents: read
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version: stable
+          cache: false
+      - run: ./scripts/check.sh
+
+  # Temporary: kept so the ruleset's required contexts check and oldest-go stay satisfiable until the owner
+  # requires test; the next pull request deletes check and oldest-go.
   check:
     runs-on: ubuntu-latest
     steps:
@@ -21,7 +35,6 @@ jobs:
           cache: false
       - run: ./scripts/check.sh
 
-  # go.mod allows Go 1.24, so the tests must pass there too. check.sh needs 1.26 or later for go fix -diff.
   oldest-go:
     runs-on: ubuntu-latest
     steps:
@@ -41,7 +54,7 @@ jobs:
   # this merges before it finishes.
   automerge:
     name: 'Dependabot auto-merge'
-    needs: [check, oldest-go]
+    needs: [test, check, oldest-go]
     if: github.event.pull_request.user.login == 'dependabot[bot]'
     runs-on: ubuntu-latest
     permissions:

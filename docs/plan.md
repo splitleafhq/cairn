@@ -123,8 +123,7 @@ A working tracker on one checkout: steps 1 to 6 (with 4b), then the release step
 after.
 
 Release step:
-- CI runs `scripts/check.sh` on every pull request, and `go vet` and `go test` on Go 1.24, the oldest version `go.mod`
-  allows. This part landed before step 4, so every later pull request is checked.
+- CI runs `scripts/check.sh` on every pull request (the `test` job). This part landed before step 4, so every later pull request is checked.
 - `cairn version` reports the tag. It prints the main module's version as Go records it in the binary
   (`runtime/debug.ReadBuildInfo`), which is the tag for `go install …@v0.1.0`; `-ldflags` never run under `go install`.
 - `go install github.com/splitleafhq/cairn/cmd/cairn@v0.1.0` works, and the README says how to install and start.
