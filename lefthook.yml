@@ -1,0 +1,6 @@
+# Runs what CI's check job runs. Install once per clone: `lefthook install`.
+pre-push:
+  jobs:
+    - name: check
+      # Git's repo variables break tools run from a linked worktree.
+      run: unset $(git rev-parse --local-env-vars); ./scripts/check.sh
