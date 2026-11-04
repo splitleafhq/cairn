@@ -21,8 +21,8 @@ Cairn is an issue tracker for coding agents first and people second. `docs/spec.
 - No personal data, machine paths or names from anyone's private setup in code, tests, docs or fixtures. Examples use
   generic names with a `test-` prefix (test-agent, test-agent-2, test-persona, test-model), so synthetic names are easy
   to find. An older example changes only when a change already edits that example.
-- Commits and PRs follow the account's
-  [repo standards](https://github.com/seriouslysean/.github/blob/main/docs/repo-standards.md#issues-and-pull-requests):
+- Commits and PRs follow the
+  [repo standards](https://github.com/splitleafhq/.github/blob/main/docs/repo-standards.md#issues-and-pull-requests):
   `type(scope): summary`, where type is feat, fix, refactor, docs or chore. feat, fix and refactor need a GitHub issue
   first, on a branch `<issue>-<slug>`. Anything else goes on `<type>/<slug>`, and its PR says `No issue: <type>`.
 - One plan step per PR, closing the step's issue. The step's tests-first commit is `chore(test): …`, since a commit of
