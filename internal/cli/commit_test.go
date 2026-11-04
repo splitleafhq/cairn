@@ -354,9 +354,10 @@ func TestCommitWithoutARepository(t *testing.T) {
 	}
 	t.Setenv("GIT_CEILING_DIRECTORIES", filepath.Dir(tr.dir))
 	tr.writeConfig(commitOn)
-	for _, path := range []string{os.Getenv("PATH"), t.TempDir()} {
+	for n, path := range []string{os.Getenv("PATH"), t.TempDir()} {
 		t.Setenv("PATH", path)
-		code, out, errOut := tr.run("new", "a")
+		// Different titles, so that new has no similar issue to warn of besides the commit.
+		code, out, errOut := tr.run("new", []string{"alpha", "beta"}[n])
 		if code != 0 {
 			t.Fatalf("PATH %q: exit %d, stderr %q", path, code, errOut)
 		}

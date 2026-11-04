@@ -437,3 +437,27 @@ func TestTimesSortAsText(t *testing.T) {
 		t.Fatalf("got  %q\nwant %q", written, want)
 	}
 }
+
+// embeddings_model and embeddings_prompt sit after embeddings_url, and are left out when empty. A prompt that ends
+// in a space is written quoted, so it reads back as it was.
+func TestConfigEmbeddingsKeys(t *testing.T) {
+	src := "---\nembeddings_url: http://127.0.0.1:8080/v1/embeddings\nembeddings_model: test-model\n" +
+		"embeddings_prompt: \"test-task: query: \"\n---\n"
+	f, _ := split(t, src)
+	c, err := ParseConfig(f)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if c.EmbeddingsModel != "test-model" || c.EmbeddingsPrompt != "test-task: query: " || len(c.Extra) != 0 {
+		t.Fatalf("got %+v", c)
+	}
+	want := "---\nstatuses: [backlog, open, in-progress, done]\nclosed: [done]\narchived: [archived]\n" +
+		"tag_groups: [severity, effort, area]\nembeddings_url: http://127.0.0.1:8080/v1/embeddings\n" +
+		"embeddings_model: test-model\nembeddings_prompt: \"test-task: query: \"\nretracted_match: 0.6\n---\n"
+	if out := join(t, c.Fields(), ""); out != want {
+		t.Fatalf("got\n%s", out)
+	}
+	if got := keys(DefaultConfig().Fields()); strings.Contains(got, "embeddings") {
+		t.Errorf("empty embeddings keys must be left out: %s", got)
+	}
+}
