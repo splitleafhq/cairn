@@ -115,12 +115,19 @@ archived: [archived]
 tag_groups: [severity, effort, area]
 github_repo: owner/name
 embeddings_url: http://127.0.0.1:8080/v1/embeddings
+embeddings_model: model-name
+embeddings_prompt: "task: sentence similarity | query: "
 retracted_match: 0.6
 commit: false
 ---
 ```
-Every key is optional. Shown above with the defaults, except that `github_repo` and `embeddings_url` are off when
-absent. `commit` is `true` or `false`.
+Every key is optional. Shown above with the defaults, except that `github_repo`, `embeddings_url`, `embeddings_model`
+and `embeddings_prompt` are off when absent. `commit` is `true` or `false`.
+
+`embeddings_model` is sent to the endpoint as `model`, and is left out when empty. `embeddings_prompt` is put before
+every text before it is embedded, and is empty by default. Some models need one: measured on one tracker, EmbeddingGemma
+put all four known duplicates first with `task: sentence similarity | query: `, and one fell to rank 4 without it. A
+value with a space at its end is written in double quotes, as above.
 
 `closed` and `archived` name the statuses that count as closed, finished work, and archived, kept for history but not
 work (see "Closed and archived issues" below). A status in both counts as archived, a name that is not one of the
@@ -179,7 +186,7 @@ later steps of [plan.md](plan.md). Until then they exit 2, a usage error. `cairn
 
 ## Rules
 An agent with only the binary learns these from `cairn help`:
-- Run cairn search before cairn new: Cairn does not look for duplicates.
+- cairn new lists the existing issues nearest its title as warnings. If one is the same work, comment there and remove the new issue. Run cairn search first anyway: it also reads bodies.
 - Comment on an issue someone else owns rather than editing it: comments never conflict across branches.
 - evidence needs --source, decision quotes the owner, result says what was done.
 - To close an issue, add a result comment, then cairn edit <id> --status done.
@@ -221,7 +228,23 @@ An agent with only the binary learns these from `cairn help`:
   - Search compares the query vector with every cached vector (cosine similarity).
 - The word-overlap score of two texts is the number of distinct words they share divided by the number of distinct
   words in either. A word is a run of letters and digits, compared in lowercase.
-- Cairn does not look for duplicates. Run `search` before `new`.
+- Cairn does not decide what a duplicate is. `new` lists the nearest titles (see "Similar issues on new"), and
+  `search` also reads bodies and comments, so run it before `new` too.
+
+## Similar issues on new
+`new` files the issue exactly as before, then compares its title with the title of every other issue in the checkout,
+closed ones included (a repeat can be a regression) and archived ones left out. It warns of the nearest 3, highest
+score first, ties by id, and exits 0. It never refuses and has no `--force`: the reader decides. Titles alone are
+compared, because bodies and tags differ between two agents who file the same work; measured on one tracker of about
+930 issues, title embeddings ranked all four known duplicates first, and no score threshold separated them from
+unrelated titles that share a prefix, so none is used. Issues on other branches are not compared.
+- With `embeddings_url`, the score is the cosine similarity of the titles' vectors, and a warning says
+  `similar issue pdev (title meaning 0.68): Agent portal: phone view`. Vectors come from the endpoint in batches, with
+  10 seconds for all of them, and are cached in `.cairn/.index/`, keyed by a hash of the url, model, prompt and title.
+- Without it, or when the endpoint fails, the score is `words.Overlap` of the titles: `similar issue jzfa (word
+  overlap 0.40): …`. When the endpoint was set and failed, one more warning comes first and says why.
+- A score of 0 is not listed. Nothing in the check can make `new` fail.
+- The warnings are the list. `new`'s data stays the issue.
 
 ## Board
 `cairn board` is the tracker as a board for a person to look at, as `ls` and `show` are for an agent. It only reads.

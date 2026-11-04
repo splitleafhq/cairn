@@ -41,33 +41,35 @@ const (
 
 // The frontmatter keys of every file type.
 const (
-	keyID              = "id"
-	keyTitle           = "title"
-	keyStatus          = "status"
-	keyTags            = "tags"
-	keyMilestone       = "milestone"
-	keyDue             = "due"
-	keyBy              = "by"
-	keyPersona         = "persona"
-	keyModel           = "model"
-	keyCreated         = "created"
-	keyUpdated         = "updated"
-	keyGitHub          = "github"
-	keyKind            = "kind"
-	keyAt              = "at"
-	keySource          = "source"
-	keyRetractedBy     = "retracted_by"
-	keyRetractedAt     = "retracted_at"
-	keyRetractedReason = "retracted_reason"
-	keyDisprovedBy     = "disproved_by"
-	keyStatuses        = "statuses"
-	keyClosed          = "closed"
-	keyArchived        = "archived"
-	keyTagGroups       = "tag_groups"
-	keyGitHubRepo      = "github_repo"
-	keyEmbeddingsURL   = "embeddings_url"
-	keyRetractedMatch  = "retracted_match"
-	keyCommit          = "commit"
+	keyID               = "id"
+	keyTitle            = "title"
+	keyStatus           = "status"
+	keyTags             = "tags"
+	keyMilestone        = "milestone"
+	keyDue              = "due"
+	keyBy               = "by"
+	keyPersona          = "persona"
+	keyModel            = "model"
+	keyCreated          = "created"
+	keyUpdated          = "updated"
+	keyGitHub           = "github"
+	keyKind             = "kind"
+	keyAt               = "at"
+	keySource           = "source"
+	keyRetractedBy      = "retracted_by"
+	keyRetractedAt      = "retracted_at"
+	keyRetractedReason  = "retracted_reason"
+	keyDisprovedBy      = "disproved_by"
+	keyStatuses         = "statuses"
+	keyClosed           = "closed"
+	keyArchived         = "archived"
+	keyTagGroups        = "tag_groups"
+	keyGitHubRepo       = "github_repo"
+	keyEmbeddingsURL    = "embeddings_url"
+	keyEmbeddingsModel  = "embeddings_model"
+	keyEmbeddingsPrompt = "embeddings_prompt"
+	keyRetractedMatch   = "retracted_match"
+	keyCommit           = "commit"
 )
 
 // TagGroupsKey is the config.yml key that lists the tag groups.
@@ -141,15 +143,17 @@ type Milestone struct {
 // Config is config.yml: frontmatter only, with an empty body. Every key is optional. Closed and Archived name the
 // statuses that count as closed and archived, as IsClosed and IsArchived read them. Commit turns on commit on write.
 type Config struct {
-	Statuses       []string
-	Closed         []string
-	Archived       []string
-	TagGroups      []string
-	GitHubRepo     string
-	EmbeddingsURL  string
-	RetractedMatch float64
-	Commit         bool
-	Extra          []doc.Field
+	Statuses         []string
+	Closed           []string
+	Archived         []string
+	TagGroups        []string
+	GitHubRepo       string
+	EmbeddingsURL    string
+	EmbeddingsModel  string
+	EmbeddingsPrompt string
+	RetractedMatch   float64
+	Commit           bool
+	Extra            []doc.Field
 }
 
 // DefaultConfig is the config used for absent keys: statuses [backlog, open, in-progress, done], closed [done],
@@ -298,14 +302,16 @@ func ParseConfig(fields []doc.Field) (Config, error) {
 	def := DefaultConfig()
 	r := newReader(fields)
 	c := Config{
-		Statuses:       r.list(keyStatuses, def.Statuses),
-		Closed:         r.list(keyClosed, def.Closed),
-		Archived:       r.list(keyArchived, def.Archived),
-		TagGroups:      r.list(keyTagGroups, def.TagGroups),
-		GitHubRepo:     r.text(keyGitHubRepo),
-		EmbeddingsURL:  r.text(keyEmbeddingsURL),
-		RetractedMatch: r.float(keyRetractedMatch, def.RetractedMatch),
-		Commit:         r.boolean(keyCommit),
+		Statuses:         r.list(keyStatuses, def.Statuses),
+		Closed:           r.list(keyClosed, def.Closed),
+		Archived:         r.list(keyArchived, def.Archived),
+		TagGroups:        r.list(keyTagGroups, def.TagGroups),
+		GitHubRepo:       r.text(keyGitHubRepo),
+		EmbeddingsURL:    r.text(keyEmbeddingsURL),
+		EmbeddingsModel:  r.text(keyEmbeddingsModel),
+		EmbeddingsPrompt: r.text(keyEmbeddingsPrompt),
+		RetractedMatch:   r.float(keyRetractedMatch, def.RetractedMatch),
+		Commit:           r.boolean(keyCommit),
 	}
 	if err := r.done(); err != nil {
 		return Config{}, err
@@ -315,7 +321,8 @@ func ParseConfig(fields []doc.Field) (Config, error) {
 }
 
 // Fields returns the config's frontmatter in the order statuses, closed, archived, tag_groups, github_repo,
-// embeddings_url, retracted_match, commit, then Extra. github_repo and embeddings_url are left out when empty, and
+// embeddings_url, embeddings_model, embeddings_prompt, retracted_match, commit, then Extra. github_repo and the
+// embeddings keys are left out when empty, and
 // commit when false. Numbers are written with strconv.FormatFloat(f, 'g', -1, 64).
 func (c Config) Fields() []doc.Field {
 	var w writer
@@ -325,6 +332,8 @@ func (c Config) Fields() []doc.Field {
 	w.list(keyTagGroups, c.TagGroups)
 	w.optText(keyGitHubRepo, c.GitHubRepo)
 	w.optText(keyEmbeddingsURL, c.EmbeddingsURL)
+	w.optText(keyEmbeddingsModel, c.EmbeddingsModel)
+	w.optText(keyEmbeddingsPrompt, c.EmbeddingsPrompt)
 	w.float(keyRetractedMatch, c.RetractedMatch)
 	w.optTrue(keyCommit, c.Commit)
 	return w.with(c.Extra)

@@ -92,6 +92,7 @@ func runNew(c *call) (output, error) {
 		return output{}, err
 	}
 	c.wroteIssue(s, i.ID)
+	c.warnSimilar(s, cfg, i)
 	return output{issueData(i), i.ID + "\n"}, nil
 }
 

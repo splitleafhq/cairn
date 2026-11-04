@@ -58,6 +58,28 @@
 // there and git add refuses it, so it still warns. Ignored files inside the path do not count. A write that fails
 // commits nothing, and init commits only as init --own-branch describes.
 //
+// Similar issues: after new has filed its issue, it compares the new title with the title of every other issue in
+// the tracker, closed ones included and archived ones left out, and warns of the nearest, at most 3, highest score
+// first, ties by id, one warning each, before any "not committed" warning. A score of 0 or less is not listed. The
+// issue is filed and the exit code is 0 whatever the check finds or fails to do: new has no refusal and no --force,
+// and data is the issue alone, so the warnings, which "warnings" in the envelope carries, are the list. A warning is
+//
+//	similar issue <id> (<signal> <score>): <title>
+//
+// where score has two decimals and signal is "title meaning" or "word overlap". When the config's embeddings_url
+// is set, the signal is "title meaning": the cosine similarity of the titles' vectors from that OpenAI-compatible
+// /v1/embeddings endpoint. A request is a POST of {"input": [<titles>], "model": <embeddings_model>} with "model"
+// left out when it is empty, in batches of at most 64 titles, and every request together is given 10 seconds. Each
+// title is sent with embeddings_prompt, which is empty by default, put before it. Vectors are kept in the tracker's
+// .index folder, in a file named for a hash of the url, model, prompt and title, so a changed title or setting is
+// fetched again, and a missing or damaged file is fetched again too. When embeddings_url is not set, the signal is
+// "word overlap", words.Overlap of the titles. When it is set but the endpoint cannot rank the titles (it is
+// unreachable, answers with a status other than 200 or a reply that is not one vector for each title, or runs out
+// of time), the signal is "word overlap" and a warning comes first: "embeddings unavailable, ranked by word
+// overlap: <the error>". A vector that could not be written to .index is the warning "title vectors not cached:
+// <the error>", and issues that could not be read is "similar issues not checked: <the error>". Nothing is
+// compared, and no endpoint asked, when the tracker holds no other issue that counts.
+//
 // Commands:
 //   - init: makes .cairn in Env.Dir (it does not look upward for a place to put it). It is "exists", and changes
 //     nothing, when Env.Dir already has a .cairn, or when store.Find from Env.Dir reaches a tracker on its own branch,
@@ -80,7 +102,8 @@
 //   - new "title" [--body text] [--tag t]... [--milestone m] [--due YYYY-MM-DD]: adds an issue with the
 //     config's first status, created and updated set to Env.Now in UTC truncated to the millisecond, and a new id.
 //     The title must not be blank. A non-empty body that does not end in "\n" gets one. Repeated tags are kept once.
-//     A config with no statuses is an "error". Text: the id and "\n". Data: the issue.
+//     A config with no statuses is an "error". Then it warns of the nearest existing issues, as "Similar issues"
+//     above says. Text: the id and "\n". Data: the issue.
 //   - edit <id> [--title t] [--body text] [--status s] [--tag +t] [--tag -t] [--milestone m] [--due d]: changes
 //     only what is given, and at least one change is required. "+t" or "t" adds a tag (no duplicates), "-t" removes
 //     it; a removed tag only has to be non-empty, so a tag whose group left the config can still go. An empty
