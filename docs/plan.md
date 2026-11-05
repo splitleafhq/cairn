@@ -339,11 +339,47 @@ Read-only context:
 - internal/cli/board_test.go
 - internal/cli/help_test.go
 
+## Step 15: similar issues on new
+Two agents that meet the same failure each file it (issue #15). Measured on one tracker, four duplicates were known:
+one came from `search ... && new ...`, because `search` exits 0 on hits. Word overlap cannot tell a duplicate from a
+template title, and no score threshold works, so `new` does not refuse. It files the issue, then lists the nearest.
+- `new` warns of the 3 existing issues whose titles are nearest the new one, highest score first, ties by id, as
+  `similar issue <id> (title meaning 0.68): <title>`. Closed issues count, archived ones do not, a score of 0 is not
+  listed, and the exit code is 0 whatever happens in the check. Titles only: bodies and tags pulled the hardest pair
+  apart in the data.
+- When it lists any, a last warning names the undo with the new id: `if <id> is the same work as one of these: put
+  what <id> adds on that issue as evidence, then run: cairn rm <id>`. Agents act on a concrete next step more than on
+  a list, and the content moves before the issue goes.
+- With `embeddings_url`, the score is the cosine similarity of title vectors from an OpenAI-compatible endpoint. The
+  config gains `embeddings_model` and `embeddings_prompt`. Vectors are cached in `.cairn/.index/`, keyed by a hash of
+  url, model, prompt and title. Without the URL, or when the call fails, the score is `words.Overlap`; a failure adds
+  a warning that says why.
+- `internal/similar` ranks and talks to the endpoint; `internal/cli/similar.go` is the glue.
+- Not built: issues on other branches, which the data does not cover; a structured field in `new`'s data, since the
+  warnings carry the list; `ls`-style listing of similar issues for a given id (#16), which can reuse this package;
+  removing cache files for titles that no longer exist.
+
+The contract is the package comment in `internal/cli/cli.go`. `help`'s first rule changes, since Cairn now does look.
+
+Drafter edits:
+- internal/cli/cli.go
+- internal/cli/help.go
+- internal/cli/issues.go
+- internal/cli/similar.go
+- internal/model/model.go
+- internal/similar/embed.go
+- internal/similar/similar.go
+
+Read-only context:
+- docs/spec.md
+- internal/cli/help_test.go
+- internal/cli/similar_test.go
+- internal/model/model_test.go
+
 ## Later, in this order
 1. `pull`, one way: GitHub issues and their comments become Cairn issues and comments.
 2. `push`.
 3. Meaning search (`.index/`).
 4. Release: CI, tagged builds, a Homebrew tap.
 
-Not planned: duplicate checks. The spec had `dupes` and a check before `new` (exit code 3, `--force`); word overlap
-could not tell a duplicate from a template title, so both wait in the backlog as #15 and #16.
+Not planned: `dupes` (#16) and a refusal before `new` (exit code 3, `--force`); step 15 builds a warning instead.

@@ -148,7 +148,7 @@ func TestOwnBranchWorktree(t *testing.T) {
 	if got := wt.write("ls"); !strings.HasPrefix(got, first+"\t") {
 		t.Errorf("ls in the worktree %q, want %s first", got, first)
 	}
-	second := wt.write("new", "from the worktree")
+	second := wt.write("new", "worktree issue")
 	if s := tr.git("-C", ".cairn", "log", "-1", "--format=%s"); s != "chore(cairn): new "+second+" (by alice)\n" {
 		t.Errorf("the worktree's write committed %q in the main checkout's tracker", s)
 	}

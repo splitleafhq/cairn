@@ -28,7 +28,7 @@ var helpUsage = []string{
 }
 
 var helpRules = []string{
-	"Run cairn search before cairn new: Cairn does not look for duplicates.",
+	"cairn new lists the existing issues nearest its title as warnings. If one is the same work, comment there and remove the new issue. Run cairn search first anyway: it also reads bodies.",
 	"Comment on an issue someone else owns rather than editing it: comments never conflict across branches.",
 	"evidence needs --source, decision quotes the owner, result says what was done.",
 	"To close an issue, add a result comment, then cairn edit <id> --status done.",
