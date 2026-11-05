@@ -66,4 +66,8 @@ func (c *call) warnSimilar(s *store.Store, cfg model.Config, filed model.Issue) 
 	for _, h := range hits {
 		c.warn(fmt.Sprintf("similar issue %s (%s %.2f): %s", h.ID, method, h.Score, h.Title))
 	}
+	if len(hits) > 0 {
+		c.warn(fmt.Sprintf("if %[1]s is the same work as one of these: put what %[1]s adds on that issue as evidence, "+
+			"then run: cairn rm %[1]s", filed.ID))
+	}
 }

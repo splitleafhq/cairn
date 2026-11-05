@@ -245,6 +245,9 @@ unrelated titles that share a prefix, so none is used. Issues on other branches 
   them all; when that fails, `edit` warns `title vector not cached: <error>` and still exits 0.
 - Without it, or when the endpoint fails, the score is `words.Overlap` of the titles: `similar issue jzfa (word
   overlap 0.40): …`. When the endpoint was set and failed, one more warning comes first and says why.
+- When at least one issue is listed, a last warning says what to do with a duplicate, the new issue's id filled
+  in: `if 7dys is the same work as one of these: put what 7dys adds on that issue as evidence, then run: cairn rm
+  7dys`.
 - A score of 0 is not listed. Nothing in the check can make `new` fail.
 - The warnings are the list. `new`'s data stays the issue.
 

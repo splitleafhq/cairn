@@ -122,6 +122,11 @@ func (tr *tracker) filed(title string) (int, issue, []string, string) {
 	return code, e.Data, e.Warnings, errOut
 }
 
+// actionLine is the warning that follows the list, for the new issue id.
+func actionLine(id string) string {
+	return fmt.Sprintf("if %[1]s is the same work as one of these: put what %[1]s adds on that issue as evidence, then run: cairn rm %[1]s", id)
+}
+
 func similarLine(id, method string, score float64, title string) string {
 	return fmt.Sprintf("similar issue %s (%s %.2f): %s", id, method, score, title)
 }
@@ -163,6 +168,7 @@ func TestNewListsSimilarByMeaning(t *testing.T) {
 		similarLine(done, "title meaning", 0.96, "test-regression in export"),
 		similarLine(near, "title meaning", 0.80, "test-export loses last row"),
 		similarLine(mid, "title meaning", 0.60, "test-import page crashes"),
+		actionLine(got.ID),
 	}
 	if !reflect.DeepEqual(warnings, want) {
 		t.Fatalf("warnings\ngot  %q\nwant %q", warnings, want)
@@ -187,7 +193,7 @@ func TestNewListsSimilarByWords(t *testing.T) {
 	tr.seed("Unrelated thing", "")
 	tr.seed("Export drops the last row, archived", "archived")
 
-	code, _, warnings, _ := tr.filed("Export drops the final row")
+	code, got, warnings, _ := tr.filed("Export drops the final row")
 	if code != 0 {
 		t.Fatalf("exit %d", code)
 	}
@@ -195,6 +201,7 @@ func TestNewListsSimilarByWords(t *testing.T) {
 		similarLine(exact, "word overlap", 0.67, "Export drops the last row"),
 		similarLine(reworded, "word overlap", 0.43, "Export loses the last row"),
 		similarLine(short, "word overlap", 0.40, "the row"),
+		actionLine(got.ID),
 	}
 	if !reflect.DeepEqual(warnings, want) {
 		t.Fatalf("warnings\ngot  %q\nwant %q", warnings, want)
@@ -204,12 +211,13 @@ func TestNewListsSimilarByWords(t *testing.T) {
 func TestNewSimilarTiesGoByID(t *testing.T) {
 	tr := newTracker(t)
 	a, b := tr.seed("test-twin title", ""), tr.seed("test-twin title", "")
-	_, _, warnings, _ := tr.filed("test-twin title again")
+	_, got, warnings, _ := tr.filed("test-twin title again")
 	ids := []string{a, b}
 	slices.Sort(ids)
 	want := []string{
 		similarLine(ids[0], "word overlap", 0.75, "test-twin title"),
 		similarLine(ids[1], "word overlap", 0.75, "test-twin title"),
+		actionLine(got.ID),
 	}
 	if !reflect.DeepEqual(warnings, want) {
 		t.Fatalf("warnings\ngot  %q\nwant %q", warnings, want)
@@ -245,8 +253,9 @@ func TestNewFallsBackWhenEmbeddingsFail(t *testing.T) {
 			if code != 0 || got.ID == "" {
 				t.Fatalf("exit %d, issue %+v", code, got)
 			}
-			if len(warnings) != 2 || !strings.HasPrefix(warnings[0], "embeddings unavailable") ||
-				warnings[1] != similarLine(id, "word overlap", 0.67, "Export drops the last row") {
+			if len(warnings) != 3 || !strings.HasPrefix(warnings[0], "embeddings unavailable") ||
+				warnings[1] != similarLine(id, "word overlap", 0.67, "Export drops the last row") ||
+				warnings[2] != actionLine(got.ID) {
 				t.Fatalf("warnings %q", warnings)
 			}
 		})
@@ -346,7 +355,7 @@ func TestNewStillFilesWhenTheCheckFails(t *testing.T) {
 			t.Fatal(err)
 		}
 		code, _, warnings, _ := tr.filed("test-title")
-		if code != 0 || len(warnings) != 2 {
+		if code != 0 || len(warnings) != 3 {
 			t.Fatalf("exit %d, warnings %q", code, warnings)
 		}
 		if want := similarLine(id, "title meaning", 0.80, "test-seed"); !slices.Contains(warnings, want) {

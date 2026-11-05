@@ -347,6 +347,9 @@ template title, and no score threshold works, so `new` does not refuse. It files
   `similar issue <id> (title meaning 0.68): <title>`. Closed issues count, archived ones do not, a score of 0 is not
   listed, and the exit code is 0 whatever happens in the check. Titles only: bodies and tags pulled the hardest pair
   apart in the data.
+- When it lists any, a last warning names the undo with the new id: `if <id> is the same work as one of these: put
+  what <id> adds on that issue as evidence, then run: cairn rm <id>`. Agents act on a concrete next step more than on
+  a list, and the content moves before the issue goes.
 - With `embeddings_url`, the score is the cosine similarity of title vectors from an OpenAI-compatible endpoint. The
   config gains `embeddings_model` and `embeddings_prompt`. Vectors are cached in `.cairn/.index/`, keyed by a hash of
   url, model, prompt and title. Without the URL, or when the call fails, the score is `words.Overlap`; a failure adds

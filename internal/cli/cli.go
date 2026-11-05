@@ -60,7 +60,9 @@
 //
 // Similar issues: after new has filed its issue, it compares the new title with the title of every other issue in
 // the tracker, closed ones included and archived ones left out, and warns of the nearest, at most 3, highest score
-// first, ties by id, one warning each, before any "not committed" warning. A score of 0 or less is not listed. The
+// first, ties by id, one warning each, then, when at least one is listed, the warning "if <id> is the same work as
+// one of these: put what <id> adds on that issue as evidence, then run: cairn rm <id>" with the new issue's id, all
+// before any "not committed" warning. A score of 0 or less is not listed. The
 // issue is filed and the exit code is 0 whatever the check finds or fails to do: new has no refusal and no --force,
 // and data is the issue alone, so the warnings, which "warnings" in the envelope carries, are the list. A warning is
 //
