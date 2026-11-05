@@ -32,9 +32,9 @@ var helpRules = []string{
 	"Comment on an issue someone else owns rather than editing it: comments never conflict across branches.",
 	"evidence needs --source, decision quotes the owner, result says what was done.",
 	"To close an issue, add a result comment, then cairn edit <id> --status done.",
-	"Retract a wrong comment instead of deleting it. purge is only for mistakes like a pasted secret.",
+	"Retract a wrong comment instead of deleting it. purge removes a comment that must not stay: a pasted secret, or one that adds nothing.",
 	"One deliverable per issue: a decision that adds another deliverable becomes a new issue that names its parent.",
-	"When you stop before an issue is done, add an evidence comment that says what is done and what is left.",
+	"When you stop before an issue is done and you did work on it, add an evidence comment that says what is done and what is left.",
 	"To park an issue on purpose, add a result comment that names what brings it back, and leave it open.",
 }
 
