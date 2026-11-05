@@ -116,10 +116,12 @@ func runEdit(c *call) (output, error) {
 	if !c.anyGiven(flagTitle, flagBody, flagStatus, flagTag, flagMilestone, flagDue) {
 		return output{}, usageError("edit requires at least one change")
 	}
+	retitled := false
 	if title, ok := c.given(flagTitle); ok {
 		if blank(title) {
 			return output{}, usageError("title must not be blank")
 		}
+		retitled = title != i.Title
 		i.Title = title
 	}
 	if body, ok := c.given(flagBody); ok {
@@ -156,6 +158,9 @@ func runEdit(c *call) (output, error) {
 		return output{}, err
 	}
 	c.wroteIssue(s, i.ID)
+	if retitled {
+		c.keepTitle(s, cfg, i.Title)
+	}
 	return output{issueData(i), i.ID + "\n"}, nil
 }
 

@@ -2,6 +2,7 @@ package similar
 
 import (
 	"bytes"
+	"cmp"
 	"context"
 	"crypto/sha256"
 	"encoding/hex"
@@ -60,6 +61,13 @@ func (e Embedder) ByMeaning(ctx context.Context, title string, candidates []Cand
 		hits = append(hits, Hit{c, cosine(vectors[0], vectors[i+1])})
 	}
 	return Rank(hits), cacheErr, nil
+}
+
+// Keep fetches and caches the vectors of the titles not cached yet, so a later ByMeaning finds them. The error is
+// why one could not be fetched or kept.
+func (e Embedder) Keep(ctx context.Context, titles ...string) error {
+	_, cacheErr, err := e.vectors(ctx, titles)
+	return cmp.Or(err, cacheErr)
 }
 
 // vectors returns one vector per title, in order.

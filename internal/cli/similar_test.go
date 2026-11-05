@@ -261,7 +261,7 @@ func TestNewCachesTitleVectors(t *testing.T) {
 	tr := newTracker(t)
 	tr.setConfig()
 	tr.seed("test-seed a", "")
-	tr.seed("test-seed b", "")
+	b := tr.seed("test-seed b", "")
 	tr.seed("test-seed c", "")
 	tr.setConfig("embeddings_url: " + srv.url() + "\n")
 
@@ -283,9 +283,17 @@ func TestNewCachesTitleVectors(t *testing.T) {
 		t.Fatalf("second new embedded %d titles, want only its own", inputs)
 	}
 
+	if code, _, errOut := tr.run("edit", b, "--title", "test-seed renamed"); code != 0 {
+		t.Fatalf("edit --title: exit %d, %s", code, errOut)
+	}
+	_, last = srv.counts()
+	if inputs, _ := step("test-new after edit"); inputs != 1 {
+		t.Fatalf("after an edit --title, new embedded %d titles, want only its own", inputs)
+	}
+
 	tr.setConfig("embeddings_url: "+srv.url()+"\n", `embeddings_prompt: "test-changed: "`+"\n")
-	if inputs, _ := step("test-new three"); inputs != 6 {
-		t.Fatalf("after a changed prompt, new embedded %d titles, want all 5 others and its own", inputs)
+	if inputs, _ := step("test-new three"); inputs != 7 {
+		t.Fatalf("after a changed prompt, new embedded %d titles, want all 6 others and its own", inputs)
 	}
 
 	err := filepath.WalkDir(filepath.Join(tr.dir, ".cairn", ".index"), func(p string, d fs.DirEntry, err error) error {
@@ -298,8 +306,8 @@ func TestNewCachesTitleVectors(t *testing.T) {
 		t.Fatalf("no cache under .cairn/.index: %v", err)
 	}
 	inputs, warnings := step("test-new four")
-	if inputs != 7 {
-		t.Fatalf("with a damaged cache, new embedded %d titles, want all 6 others and its own", inputs)
+	if inputs != 8 {
+		t.Fatalf("with a damaged cache, new embedded %d titles, want all 7 others and its own", inputs)
 	}
 	for _, w := range warnings {
 		if strings.HasPrefix(w, "embeddings unavailable") {

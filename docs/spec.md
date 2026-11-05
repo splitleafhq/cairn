@@ -241,6 +241,8 @@ unrelated titles that share a prefix, so none is used. Issues on other branches 
 - With `embeddings_url`, the score is the cosine similarity of the titles' vectors, and a warning says
   `similar issue pdev (title meaning 0.68): Agent portal: phone view`. Vectors come from the endpoint in batches, with
   10 seconds for all of them, and are cached in `.cairn/.index/`, keyed by a hash of the url, model, prompt and title.
+  `edit --title` caches the new title's vector as it saves, so retitling issues does not leave the next `new` to fetch
+  them all; when that fails, `edit` warns `title vector not cached: <error>` and still exits 0.
 - Without it, or when the endpoint fails, the score is `words.Overlap` of the titles: `similar issue jzfa (word
   overlap 0.40): …`. When the endpoint was set and failed, one more warning comes first and says why.
 - A score of 0 is not listed. Nothing in the check can make `new` fail.

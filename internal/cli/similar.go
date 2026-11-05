@@ -13,6 +13,19 @@ import (
 // indexDir is the folder in the tracker where derived data is kept. It is ignored by git.
 const indexDir = ".index"
 
+// keepTitle caches the vector of a title that edit has just saved, so the next new does not wait for it. Nothing in it
+// fails the command: an error becomes a warning.
+func (c *call) keepTitle(s *store.Store, cfg model.Config, title string) {
+	if cfg.EmbeddingsURL == "" {
+		return
+	}
+	e := similar.Embedder{URL: cfg.EmbeddingsURL, Model: cfg.EmbeddingsModel, Prompt: cfg.EmbeddingsPrompt,
+		Index: filepath.Join(s.Dir, indexDir)}
+	if err := e.Keep(context.Background(), title); err != nil {
+		c.warn("title vector not cached: " + err.Error())
+	}
+}
+
 // warnSimilar warns of the existing issues nearest the title of the issue that new has just filed, as the package
 // comment says. Nothing in it fails the command: every error becomes a warning.
 func (c *call) warnSimilar(s *store.Store, cfg model.Config, filed model.Issue) {
