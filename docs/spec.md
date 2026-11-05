@@ -183,9 +183,9 @@ An agent with only the binary learns these from `cairn help`:
 - Comment on an issue someone else owns rather than editing it: comments never conflict across branches.
 - evidence needs --source, decision quotes the owner, result says what was done.
 - To close an issue, add a result comment, then cairn edit <id> --status done.
-- Retract a wrong comment instead of deleting it. purge is only for mistakes like a pasted secret.
+- Retract a wrong comment instead of deleting it. purge removes a comment that must not stay: a pasted secret, or one that adds nothing.
 - One deliverable per issue: a decision that adds another deliverable becomes a new issue that names its parent.
-- When you stop before an issue is done, add an evidence comment that says what is done and what is left.
+- When you stop before an issue is done and you did work on it, add an evidence comment that says what is done and what is left.
 - To park an issue on purpose, add a result comment that names what brings it back, and leave it open.
 
 ## Closed and archived issues
@@ -211,7 +211,8 @@ An agent with only the binary learns these from `cairn help`:
 - A new comment whose word-overlap score (below) with a retracted comment on the same issue reaches `retracted_match`
   is still added, with a warning that names the retracted comment and its reason. With `--json` its data lists them
   as `retracted_matches`.
-- `purge` deletes the comment file, for mistakes such as a pasted secret. Git history still holds it.
+- `purge` deletes the comment file, for a comment that must not stay: a pasted secret, or one that adds nothing
+  (a repeat, a note that only says who took or released the issue). Git history still holds it.
 
 ## Search
 - `search` scans titles, bodies and active comments for the words given, and ranks by how many match.
