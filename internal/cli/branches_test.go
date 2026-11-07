@@ -32,12 +32,12 @@ func gitTracker(t *testing.T, branch, sub string) *tracker {
 	return tr
 }
 
-// isolateGit skips the test when git is not installed, and otherwise runs git, for the test and for Cairn, with no
+// isolateGit fails the test when git is not installed, and otherwise runs git, for the test and for Cairn, with no
 // global or system config, no GIT_DIR-like overrides, and alice as author and committer.
 func isolateGit(t *testing.T) {
 	t.Helper()
 	if _, err := exec.LookPath("git"); err != nil {
-		t.Skip("git is not installed")
+		t.Fatal("git is not installed; these tests need it")
 	}
 	for _, k := range []string{"GIT_DIR", "GIT_WORK_TREE", "GIT_INDEX_FILE", "GIT_COMMON_DIR"} {
 		t.Setenv(k, "")
